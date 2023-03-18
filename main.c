@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stddef.h>
 //#include "mystring.h"
 
 char *mystrchr(const char *s, int c);
@@ -19,6 +20,7 @@ int main()
   
   //printf("%s\n",hello);
 
+  printf("%s\n", strchr(test,NULL));
   //printf("%p\n",test);
   /*
   printf("%s\n", strchr(test,letter));
@@ -54,7 +56,7 @@ int main()
 
     tok = strtok( NULL , hello );
   }
-  */
+  
   tok = mystrtok( test , hello );
   while( tok != NULL )
   {
@@ -62,8 +64,7 @@ int main()
 
     tok = mystrtok( NULL , hello );
   }
-  
-  //puts( next );
+  */
   
   return 0;
 }
@@ -71,20 +72,23 @@ int main()
 char *mystrchr(const char *s, int c)
 {
   long int i = 0;
+  char *ret;
+
+  ret = (char *)s;
 
   while( 1 )
   {
-    if( *(s + i) == c )
+    if( *ret == c )
     {
-      return (s + i);
+      return ret;
     }
-    else if( *(s + i) == 0 )
+    else if( *ret == 0 )
     {
       break;
     }
     else
     {
-      i += 1;
+      ret = ret + 1;
     }
   }
   
@@ -95,6 +99,7 @@ char *mystrrchr(const char *s, int c)
 {
   long int i = 0;
   long int n = 0;
+
   while( 1 )
   {
     if( *(s + i) == 0 )
@@ -111,7 +116,7 @@ char *mystrrchr(const char *s, int c)
   {
     if( *(s + n) == c )
     {
-      return (s + n);
+      return (char *) (s + n);
     }
     else
     {
@@ -126,9 +131,11 @@ size_t mystrspn(const char *s, const char *accept)
 {
   long int i = 0;
   int8_t flag = 0;
+
   while( 1 )
   {
     long int j = 0;
+
     while( *(accept + j) != 0 )
     {
       if( *(accept + j) == *(s + i) )
@@ -142,6 +149,7 @@ size_t mystrspn(const char *s, const char *accept)
       }
       j++;
     }
+
     if( flag == 1 )
     {
       break;
@@ -156,9 +164,11 @@ size_t mystrcspn(const char *s, const char *reject)
 {
   long int i = 0;
   int8_t flag = 0;
+
   while( 1 )
   {
     long int j = 0;
+
     while( *(reject + j) != 0 )
     {
       if( *(reject + j) == *(s + i) )
@@ -168,7 +178,8 @@ size_t mystrcspn(const char *s, const char *reject)
       }
       j++;
     }
-    if( flag == 1 )
+
+    if( flag == 1 || *(s + i) == 0 )
     {
       break;
     }
@@ -180,20 +191,23 @@ size_t mystrcspn(const char *s, const char *reject)
 char *mystrpbrk(const char *s, const char *accept)
 {
   long int i = 0;
+
   while( 1 )
   {
     long int j = 0;
+
     while( *(accept + j) != 0 )
     {
       if( *(s + i) == *(accept + j) )
       {
-        return (s + i);
+        return (char *) (s + i);
       }
       else
       {
         j++;
       }
     }
+
     if( *(s + i) == 0 )
     {
       break;
@@ -203,17 +217,20 @@ char *mystrpbrk(const char *s, const char *accept)
       i += 1;
     }
   }
+
   return NULL;
 }
 
 char *mystrstr(const char *haystack , const char *needle)
 {
   long int i = 0;
+
   while( *(haystack + i) != 0 )
   {
     if( *(haystack + i) == *needle )
     {
       long int j = 0;
+
       while( *(needle + j) != 0 )
       {
         if( *(haystack + i + j) != *(needle + j) )
@@ -222,7 +239,7 @@ char *mystrstr(const char *haystack , const char *needle)
         }
         if( *(needle + j + 1) == 0 )
         {
-          return (haystack + i);
+          return (char *) (haystack + i);
         }
         j++;
       }
@@ -238,11 +255,7 @@ char *mystrtok(char *str, const char *delim)
   static char *next = NULL;
   long int i = 0;
   int8_t flag = 0;
-  // if( next != NULL )
-  // {
-  //   printf( "next: " );
-  //   puts( next );
-  // }
+  
   if( str == NULL )
   {
     if( next == NULL )
@@ -250,13 +263,13 @@ char *mystrtok(char *str, const char *delim)
       return NULL;
     }
     char *ret = next;
+
     while( 1 )
     {
-      //printf( "%ld\n" , i );
       long int j = 0;
+
       while( *(delim + j) != 0 )
       {
-        //printf( "%c %c\n" , str[i] , *(delim+j) );
         if( *(next + i) == *(delim + j) )
         {
           flag = 1;
@@ -264,6 +277,7 @@ char *mystrtok(char *str, const char *delim)
         }
         j++;
       }
+
       if( flag == 1 )
       {
         *(next + i) = 0;
@@ -282,14 +296,12 @@ char *mystrtok(char *str, const char *delim)
   }
   else
   {
-    //printf( "\n" );
     while( 1 )
     {
-      //printf( "%ld\n" , i );
       long int j = 0;
+
       while( *(delim + j) != 0 )
       {
-        //printf( "%c %c\n" , str[i] , *(delim+j) );
         if( str[i] == *(delim + j) )
         {
           flag = 1;
@@ -297,6 +309,7 @@ char *mystrtok(char *str, const char *delim)
         }
         j++;
       }
+
       if( flag == 1 )
       {
         str[i] = 0;
