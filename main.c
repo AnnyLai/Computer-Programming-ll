@@ -1,4 +1,3 @@
-//to do: solve overflow case
 // hw0103.c
 #include <stdio.h>
 #include <stdint.h>
@@ -31,18 +30,18 @@ int main()
     sAbacus *abacus3 = abacus_init();
 
     // Set the values of abacus and abacus2 to "1234" and "5678"
-    if(abacus_set(abacus, "1234") != 0) 
+    if(abacus_set(abacus, "345") != 0) 
     {
         printf("Error: Set operation failed\n");
         return -1;
     }
-    if(abacus_set(abacus2, "1234") != 0) 
+    if(abacus_set(abacus2, "12345") != 0) 
     {
         printf("Error: Set operation failed\n");
         return -1;
     }
 
-    /*
+    
     // Add abacus and abacus2, store result in abacus3
     if(abacus_add(abacus3, *abacus, *abacus2) != 0) 
     {
@@ -56,10 +55,10 @@ int main()
         printf("Error: Print operation failed\n");
         return -1;
     }
-    */
+    
     //printf( "\n" );
   
-    
+    /*
     // Subtract abacus from abacus2, store result in abacus3
     if(abacus_del(abacus3, *abacus2, *abacus) != 0) 
     {
@@ -73,7 +72,7 @@ int main()
         printf("Error: Print operation failed\n");
         return -1;
     }
-    
+    */
     /*
     abacus_print(*abacus);
     printf( "\n" );
@@ -187,9 +186,20 @@ int32_t abacus_add( sAbacus *pA, sAbacus b, sAbacus c )
 
     carry( add , b.number+1 );
 
+    if( b.number + 1 == 256 && add[0] != 0 )
+    {
+      return -1;
+    }
+    for( size_t i = 0 ; i < b.number+1 ; i++ )
+    {
+      if( add[i] > 9 )
+      {
+        return -1;
+      }
+    }
+
     if( add[0] == 0 )
     {
-      //pA -> number = b.number;
       new = calloc( b.number , sizeof(uint8_t) );
       for( size_t i = 0 ; i < b.number ; i++ )
       {
@@ -198,9 +208,8 @@ int32_t abacus_add( sAbacus *pA, sAbacus b, sAbacus c )
     }
     else
     {
-      //pA -> number = b.number + 1;
       new = calloc( b.number+1 , sizeof(uint8_t) );
-      for( size_t i = 0 ; i < b.number ; i++ )
+      for( size_t i = 0 ; i <= b.number ; i++ )
       {
         new[i] = add[i] + 48;
       }
@@ -228,9 +237,20 @@ int32_t abacus_add( sAbacus *pA, sAbacus b, sAbacus c )
 
     carry( add , c.number+1 );
 
+    if( c.number + 1 == 256 && add[0] != 0 )
+    {
+      return -1;
+    }
+    for( size_t i = 0 ; i < c.number+1 ; i++ )
+    {
+      if( add[i] > 9 )
+      {
+        return -1;
+      }
+    }
+
     if( add[0] == 0 )
     {
-      //pA -> number = c.number;
       new = calloc( c.number , sizeof(uint8_t) );
       for( size_t i = 0 ; i < c.number ; i++ )
       {
@@ -239,9 +259,8 @@ int32_t abacus_add( sAbacus *pA, sAbacus b, sAbacus c )
     }
     else
     {
-      //pA -> number = c.number + 1;
       new = calloc( c.number+1 , sizeof(uint8_t) );
-      for( size_t i = 0 ; i < c.number ; i++ )
+      for( size_t i = 0 ; i <= c.number ; i++ )
       {
         new[i] = add[i] + 48;
       }
@@ -283,23 +302,18 @@ int32_t abacus_del( sAbacus *pA, sAbacus b, sAbacus c )
     
     carry( del , b.number );
 
-    if( del[0] == 0 )
+    for( size_t i = 0 ; i < b.number ; i++ )
     {
-      //pA -> number = b.number;
-      new = calloc( b.number-1 , sizeof(uint8_t) );
-      for( size_t i = 1 ; i < b.number ; i++ )
+      if( del[i] < 0 )
       {
-        new[i-1] = del[i] + 48;
+        return -1;
       }
     }
-    else
+
+    new = calloc( b.number , sizeof(uint8_t) );
+    for( size_t i = 0 ; i < b.number ; i++ )
     {
-      //pA -> number = b.number + 1;
-      new = calloc( b.number , sizeof(uint8_t) );
-      for( size_t i = 0 ; i < b.number ; i++ )
-      {
-        new[i] = del[i] + 48;
-      }
+      new[i] = del[i] + 48;
     }
   }
   else
@@ -315,18 +329,21 @@ int32_t abacus_del( sAbacus *pA, sAbacus b, sAbacus c )
 // Successful: return 0; otherwise , return -1
 int32_t abacus_print( sAbacus a )
 {
+  int8_t flag = 0;
   if( a.number == 0 )
   {
     return -1;
   }
   for( size_t j = 0 ; j < 8 ; j++ )
   {
+    flag = 0;
     for( size_t i = 0 ; i < a.number ; i++ )
     {
-      if( i == 0 && (a.pUpperRod)[i] == 0 && (a.pLowerRod)[i] == 0 )
+      if( flag == 0 && (a.pUpperRod)[i] == 0 && (a.pLowerRod)[i] == 0 && i != (a.number-1) )
       {
         continue;
       }
+      flag = 1;
       if( j == 0 )
       {
         if( (a.pUpperRod)[i] == 0 )
@@ -420,15 +437,15 @@ void carry( int8_t *start , int16_t n )
 {
   for( size_t i = 1 ; i <= n ; i++ )
   {
-    if( start[n-i] > 9 )
+    if( start[n-i] > 9 && (n - i) > 0 )
     {
       start[n-i] -= 10;
       start[n-i-1] += 1;
     }
-    if( start[n-i] < 0 )
+    if( start[n-i] < 0 && (n - i) > 0 )
     {
       start[n-i] += 10;
-      start[n-i+1] -= 1;
+      start[n-i-1] -= 1;
     }
   }
 }
