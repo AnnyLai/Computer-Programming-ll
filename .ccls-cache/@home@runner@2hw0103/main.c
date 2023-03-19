@@ -90,7 +90,8 @@ int main()
 
 sAbacus * abacus_init( void )
 {
-  sAbacus *init = calloc( 1 , sizeof(sAbacus) );
+  sAbacus *init;
+  init = calloc( 1 , sizeof(sAbacus) );
 
   return init;
 }
@@ -101,13 +102,7 @@ void abacus_free( sAbacus * aba )
   free( aba );
 }
 
-// Set pA according to pStr
-// For example , pStr is "123456789"
-// pA -> number = 9;
-// pA -> pUpperRod: {0,0,0,0,1,1,1,1,1}
-// pA -> pLowerRod: {1,2,3,4,0,1,2,3,4}
-// if the length of pStr > 255 or the string contains alphabets or special character or NULL, return -1.
-// Otherwise , return 0
+
 int32_t abacus_set( sAbacus *pA, char *pStr )
 {
   int16_t n = 0;
@@ -150,8 +145,6 @@ int32_t abacus_set( sAbacus *pA, char *pStr )
   return 0;
 }
 
-// a = b + c
-// Successful: return 0; otherwise , return -1
 int32_t abacus_add( sAbacus *pA, sAbacus b, sAbacus c )
 {
   if( b.number == 0 || c.number == 0 )
@@ -163,7 +156,7 @@ int32_t abacus_add( sAbacus *pA, sAbacus b, sAbacus c )
     pA = abacus_init();
   }
 
-  char *new = NULL;
+  char *pnew = NULL;
   if( b.number >= c.number )
   {
     int8_t add[b.number+1];
@@ -200,18 +193,18 @@ int32_t abacus_add( sAbacus *pA, sAbacus b, sAbacus c )
 
     if( add[0] == 0 )
     {
-      new = calloc( b.number , sizeof(uint8_t) );
+      pnew = calloc( b.number , sizeof(uint8_t) );
       for( size_t i = 0 ; i < b.number ; i++ )
       {
-        new[i] = add[i+1] + 48;
+        pnew[i] = add[i+1] + 48;
       }
     }
     else
     {
-      new = calloc( b.number+1 , sizeof(uint8_t) );
+      pnew = calloc( b.number+1 , sizeof(uint8_t) );
       for( size_t i = 0 ; i <= b.number ; i++ )
       {
-        new[i] = add[i] + 48;
+        pnew[i] = add[i] + 48;
       }
     }
   }
@@ -251,28 +244,26 @@ int32_t abacus_add( sAbacus *pA, sAbacus b, sAbacus c )
 
     if( add[0] == 0 )
     {
-      new = calloc( c.number , sizeof(uint8_t) );
+      pnew = calloc( c.number , sizeof(uint8_t) );
       for( size_t i = 0 ; i < c.number ; i++ )
       {
-        new[i] = add[i+1] + 48;
+        pnew[i] = add[i+1] + 48;
       }
     }
     else
     {
-      new = calloc( c.number+1 , sizeof(uint8_t) );
+      pnew = calloc( c.number+1 , sizeof(uint8_t) );
       for( size_t i = 0 ; i <= c.number ; i++ )
       {
-        new[i] = add[i] + 48;
+        pnew[i] = add[i] + 48;
       }
     }
   }
 
-  abacus_set( pA , new );
+  abacus_set( pA , pnew );
   return 0;
 }
 
-// a = b - c
-// Successful: return 0; otherwise , return -1
 int32_t abacus_del( sAbacus *pA, sAbacus b, sAbacus c )
 {
   if( b.number == 0 || c.number == 0 )
@@ -284,7 +275,7 @@ int32_t abacus_del( sAbacus *pA, sAbacus b, sAbacus c )
     pA = abacus_init();
   }
 
-  char *new = NULL;
+  char *pnew = NULL;
   if( b.number >= c.number )
   {
     int8_t del[b.number];
@@ -310,10 +301,10 @@ int32_t abacus_del( sAbacus *pA, sAbacus b, sAbacus c )
       }
     }
 
-    new = calloc( b.number , sizeof(uint8_t) );
+    pnew = calloc( b.number , sizeof(uint8_t) );
     for( size_t i = 0 ; i < b.number ; i++ )
     {
-      new[i] = del[i] + 48;
+      pnew[i] = del[i] + 48;
     }
   }
   else
@@ -321,12 +312,10 @@ int32_t abacus_del( sAbacus *pA, sAbacus b, sAbacus c )
     return -1;
   }
 
-  abacus_set( pA , new );
+  abacus_set( pA , pnew );
   return 0;
 }
 
-
-// Successful: return 0; otherwise , return -1
 int32_t abacus_print( sAbacus a )
 {
   int8_t flag = 0;
@@ -348,7 +337,7 @@ int32_t abacus_print( sAbacus a )
       {
         if( (a.pUpperRod)[i] == 0 )
         {
-          printf( "*" );
+          printf( "\033[1;31m""*" );
         }
         else if( (a.pUpperRod)[i] == 1 )
         {
@@ -368,7 +357,7 @@ int32_t abacus_print( sAbacus a )
       }
       else if( j == 2 )
       {
-        printf( "-" );
+        printf( "\033[1;37m""-" );
       }
       else if( j == 3 )
       {
@@ -378,7 +367,7 @@ int32_t abacus_print( sAbacus a )
         }
         else
         {
-          printf( "*" );
+          printf( "\033[1;33m""*" );
         }
       }
       else if( j == 4 )
