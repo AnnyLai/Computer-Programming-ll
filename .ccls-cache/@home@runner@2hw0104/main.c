@@ -149,6 +149,27 @@ node *read( char *json )
         (now->key)[count] = 0;
         i += (count-1);
     }
+    else if( json[i] == 't' && json[i+1] == 'r' && json[i+2] == 'u' && json[i+3] == 'e' )
+    {
+        now -> key = calloc( 5 , sizeof(char) );
+        (now->key)[0] = 't';
+        (now->key)[1] = 'r';
+        (now->key)[2] = 'u';
+        (now->key)[3] = 'e';
+        (now->key)[4] = 0;
+        i += 3;
+    }
+    else if( json[i] == 'f' && json[i+1] == 'a' && json[i+2] == 'l' && json[i+3] == 's' && json[i+4] == 'e' )
+    {
+        now -> key = calloc( 6 , sizeof(char) );
+        (now->key)[0] = 'f';
+        (now->key)[1] = 'a';
+        (now->key)[2] = 'l';
+        (now->key)[3] = 's';
+        (now->key)[4] = 'e';
+        (now->key)[5] = 0;
+        i += 4;
+    }
     i++;
   }
 
@@ -230,6 +251,5 @@ void find( node *st )
     printf( "Value: " );
     puts( now -> key );
 }
-
 
 
