@@ -31,7 +31,7 @@ sMatrix * matrix_init( uint8_t m, uint8_t n)
 // If error , return -1; otherwise , return 0;
 int32_t matrix_set( sMatrix *pM, uint8_t m, uint8_t n, int32_t value )
 {
-    if( m >= pM->height || n >= pM->width )
+    if( pM == NULL || pM->val == NULL || m >= pM->height || n >= pM->width )
     {
         return -1;
     }
@@ -51,7 +51,7 @@ int32_t matrix_set( sMatrix *pM, uint8_t m, uint8_t n, int32_t value )
 // 0 1
 void matrix_print( const sMatrix *pM )
 {
-    if( pM->height > 0 && pM->width > 0 && pM->val != NULL )
+    if( pM != NULL && pM->height > 0 && pM->width > 0 && pM->val != NULL )
     {
         const int32_t *p = pM -> val;
         int32_t max = 0;
@@ -123,7 +123,7 @@ void matrix_print( const sMatrix *pM )
 // If error , return -1; otherwise , return 0;
 int32_t matrix_add( sMatrix *pA, const sMatrix *pB, const sMatrix *pC )
 {
-    if( pB->height != pC->height || pB->width != pC->width || pB->height < 0 || pB->width < 0 || pC->height < 0 || pC->width < 0 || pA == NULL )
+    if( pB->height != pC->height || pB->width != pC->width || pB->height <= 0 || pB->width <= 0 || pC->height <= 0 || pC->width <= 0 || pA == NULL || pA->val == NULL )
     {
         return -1;
     }
@@ -145,7 +145,7 @@ int32_t matrix_add( sMatrix *pA, const sMatrix *pB, const sMatrix *pC )
 // If error , return -1; otherwise , return 0;
 int32_t matrix_multiply( sMatrix *pA, const sMatrix *pB, const sMatrix *pC )
 {
-    if( pB->width != pC->height || pB->height < 0 || pB->width < 0 || pC->width < 0 || pA == NULL )
+    if( pB->width != pC->height || pB->height <= 0 || pB->width <= 0 || pC->width <= 0 || pA == NULL || pA->val == NULL )
     {
         return -1;
     }
@@ -173,7 +173,7 @@ int32_t matrix_multiply( sMatrix *pA, const sMatrix *pB, const sMatrix *pC )
 // If error , return -1; otherwise , return 0;
 int32_t matrix_transpose( sMatrix *pA)
 {
-    if( pA == NULL || pA->height < 0 || pA->width < 0 )
+    if( pA == NULL || pA->height <= 0 || pA->width <= 0 )
     {
         return -1;
     }
@@ -193,12 +193,12 @@ int32_t matrix_transpose( sMatrix *pA)
     matrix_free( temp );*/
     
     
-    int32_t *or = (int32_t *)calloc( pA->width , pA->height );
+    int32_t *origin = (int32_t *)calloc( pA->width , pA->height );
     for( size_t i = 0 ; i < pA->height ; i++ )
     {
         for( size_t j = 0 ; j < pA->width ; j++ )
         {
-            or[i*pA->width+j] = pA->val[i*pA->width+j];
+            origin[i*pA->width+j] = pA->val[i*pA->width+j];
             //printf( "%d " , or[i*pA->width+j] );
         }
         //printf( "\n" );
@@ -212,7 +212,7 @@ int32_t matrix_transpose( sMatrix *pA)
     {
         for( size_t j = 0 ; j < pA->width ; j++ )
         {
-            pA->val[i*pA->width+j] = or[j*pA->height+i];
+            pA->val[i*pA->width+j] = origin[j*pA->height+i];
             //printf( "%d " , pA->val[i*pA->width+j] );
         }
         //printf( "\n" );
@@ -226,7 +226,46 @@ int32_t matrix_transpose( sMatrix *pA)
 // Determinant
 // Determinant should be put to *pAns
 // If error , return -1; otherwise , return 0;
-int32_t matrix_det(const sMatrix *pA, int32_t *pAns);
+int32_t matrix_det(const sMatrix *pA, int32_t *pAns)
+{
+    if( pA == NULL || pA->height <= 0 || pA->height != pA->width || pA->val == NULL || pAns == NULL )
+    {
+        return -1;
+    }
+    sMatrix *p = NULL;
+    p = (sMatrix *)calloc( 1 , sizeof(sMatrix) );
+    p -> height = pA -> height;
+    p -> width = pA -> width;
+    p -> val = (int32_t *)calloc( p->height * p->width , sizeof(int32_t) );
+
+    for( size_t i = 0 ; i < p->height ; i++ )
+    {
+        for( size_t j = 0 ; j < p->width ; j++ )
+        {
+            p -> val[i*p->width+j] = pA -> val[i*pA->width+j];
+        }
+    }
+
+    for( size_t j = 0 ; j < (p->width-1) ; j++ )
+    {
+        for( size_t i = j+1 ; i < p->height ; i++ )
+        {
+            int32_t mul = 0;
+            mul = p->val[i*p->width+j] / p->val[j*p->width+j];
+            //printf( "i,j,mul = %lu,%lu,%f\n" , i, j, mul );
+            for( size_t k = j ; k < p->height ; k++ )
+            {
+                p -> val[i*p->width+k] -= (p->val[j*p->width+k] * mul);
+            }
+        }
+    }
+
+    *pAns = 1;
+    for( size_t i = 0 ; i < p->height ; i++ )
+    {
+        *pAns *= (p -> val[i*p->width+i]);
+    }
+}
 
 // Free
 // If error , return -1; otherwise , return 0;
