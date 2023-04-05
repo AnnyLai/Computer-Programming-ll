@@ -31,8 +31,8 @@ int main()
   pOut = fopen( "output.txt" , "w+" );
   fclose( pOut );
 
-  char inputstr[2001] = {0};
-  fread( &inputstr[0] , 1 , 2000 , pFile );
+  char inputstr[2049] = {0};
+  fread( &inputstr[0] , 1 , 2048 , pFile );
   if( strlen( inputstr ) == 0 )
   {
     printf("Invalid input.\n");
@@ -61,9 +61,9 @@ int main()
   
   while( !feof(pFile) )
   {
-    if( i == 2000 )
+    if( i == 2048 )
     {
-      fread( inputstr , 1 , 2000 , pFile );
+      fread( inputstr , 1 , 2048 , pFile );
       i = 0;
     }
     bible_init( tempt );
@@ -77,9 +77,9 @@ int main()
         if( inputstr[i] == '"' )
         {
           j = 1;
-          if( i+j == 2000 )
+          if( i+j == 2048 )
           {
-            fread( inputstr , 1 , 2000 , pFile );
+            fread( inputstr , 1 , 2048 , pFile );
             i = -j;
           }
           for( size_t s = 0 ; s < 15 ; s++ )
@@ -92,9 +92,9 @@ int main()
             tag[j-1] = inputstr[i+j];
             
             j++;
-            if( i+j == 2000 )
+            if( i+j == 2048 )
             {
-              fread( inputstr , 1 , 2000 , pFile );
+              fread( inputstr , 1 , 2048 , pFile );
               i = -j;
             }
           }
@@ -104,9 +104,9 @@ int main()
             while( inputstr[i+j] < 48 || inputstr[i+j] > 57 )
             {
               j++;
-              if( i+j == 2000 )
+              if( i+j == 2048 )
               {
-                fread( inputstr , 1 , 2000 , pFile );
+                fread( inputstr , 1 , 2048 , pFile );
                 i = -j;
               }
             }
@@ -114,9 +114,9 @@ int main()
             {
               tempt -> chapter = (10 * tempt->chapter) + (inputstr[i+j] - '0');
               j++;
-              if( i+j == 2000 )
+              if( i+j == 2048 )
               {
-                fread( inputstr , 1 , 2000 , pFile );
+                fread( inputstr , 1 , 2048 , pFile );
                 i = -j;
               }
             }
@@ -126,9 +126,9 @@ int main()
             while( inputstr[i+j] < 48 || inputstr[i+j] > 57 )
             {
               j++;
-              if( i+j == 2000 )
+              if( i+j == 2048 )
               {
-                fread( inputstr , 1 , 2000 , pFile );
+                fread( inputstr , 1 , 2048 , pFile );
                 i = -j;
               }
             }
@@ -136,9 +136,9 @@ int main()
             {
               tempt -> verse = (10 * tempt->verse) + (inputstr[i+j] - '0');
               j++;
-              if( i+j == 2000 )
+              if( i+j == 2048 )
               {
-                fread( inputstr , 1 , 2000 , pFile );
+                fread( inputstr , 1 , 2048 , pFile );
                 i = -j;
               }
             }
@@ -146,169 +146,169 @@ int main()
           else if( strstr(tag , "text") )
           {
             j++;
-            if( i+j == 2000 )
+            if( i+j == 2048 )
             {
-              fread( inputstr , 1 , 2000 , pFile );
+              fread( inputstr , 1 , 2048 , pFile );
               i = -j;
             }
             while( inputstr[i+j] != '"' )
             {
               j++;
-              if( i+j == 2000 )
+              if( i+j == 2048 )
               {
-                fread( inputstr , 1 , 2000 , pFile );
+                fread( inputstr , 1 , 2048 , pFile );
                 i = -j;
               }
             }
             int32_t k = 1;
-            if( i+j+k == 2000 )
+            if( i+j+k == 2048 )
             {
-              fread( inputstr , 1 , 2000 , pFile );
+              fread( inputstr , 1 , 2048 , pFile );
               i = -j - k;
             }
             while( inputstr[i+j+k] != '"' )
             {
               tempt -> text[k-1] = inputstr[i+j+k];
               k++;
-              if( i+j+k == 2000 )
+              if( i+j+k == 2048 )
               {
-                fread( inputstr , 1 , 2000 , pFile );
+                fread( inputstr , 1 , 2048 , pFile );
                 i = -j - k;
               }
             }
             j += k;
-            if( i+j == 2000 )
+            if( i+j == 2048 )
             {
-              fread( inputstr , 1 , 2000 , pFile );
+              fread( inputstr , 1 , 2048 , pFile );
               i = -j;
             }
           }
           else if( strstr(tag , "translation_id") )
           {
             j++;
-            if( i+j == 2000 )
+            if( i+j == 2048 )
             {
-              fread( inputstr , 1 , 2000 , pFile );
+              fread( inputstr , 1 , 2048 , pFile );
               i = -j;
             }
             while( inputstr[i+j] != '"' )
             {
               j++;
-              if( i+j == 2000 )
+              if( i+j == 2048 )
               {
-                fread( inputstr , 1 , 2000 , pFile );
+                fread( inputstr , 1 , 2048 , pFile );
                 i = -j;
               }
             }
             int32_t k = 1;
-            if( i+j+k == 2000 )
+            if( i+j+k == 2048 )
             {
-              fread( inputstr , 1 , 2000 , pFile );
+              fread( inputstr , 1 , 2048 , pFile );
               i = -j - k;
             }
             while( inputstr[i+j+k] != '"' )
             {
               tempt -> translation_id[k-1] = inputstr[i+j+k];
               k++;
-              if( i+j+k == 2000 )
+              if( i+j+k == 2048 )
               {
-                fread( inputstr , 1 , 2000 , pFile );
+                fread( inputstr , 1 , 2048 , pFile );
                 i = -j - k;
               }
             }
             j += k;
-            if( i+j == 2000 )
+            if( i+j == 2048 )
             {
-              fread( inputstr , 1 , 2000 , pFile );
+              fread( inputstr , 1 , 2048 , pFile );
               i = -j;
             }
           }
           else if( strstr(tag , "book_id") )
           {
             j++;
-            if( i+j == 2000 )
+            if( i+j == 2048 )
             {
-              fread( inputstr , 1 , 2000 , pFile );
+              fread( inputstr , 1 , 2048 , pFile );
               i = -j;
             }
             while( inputstr[i+j] != '"' )
             {
               j++;
-              if( i+j == 2000 )
+              if( i+j == 2048 )
               {
-                fread( inputstr , 1 , 2000 , pFile );
+                fread( inputstr , 1 , 2048 , pFile );
                 i = -j;
               }
             }
             int32_t k = 1;
-            if( i+j+k == 2000 )
+            if( i+j+k == 2048 )
             {
-              fread( inputstr , 1 , 2000 , pFile );
+              fread( inputstr , 1 , 2048 , pFile );
               i = -j - k;
             }
             while( inputstr[i+j+k] != '"' )
             {
               tempt -> book_id[k-1] = inputstr[i+j+k];
               k++;
-              if( i+j+k == 2000 )
+              if( i+j+k == 2048 )
               {
-                fread( inputstr , 1 , 2000 , pFile );
+                fread( inputstr , 1 , 2048 , pFile );
                 i = -j - k;
               }
             }
             j += k;
-            if( i+j == 2000 )
+            if( i+j == 2048 )
             {
-              fread( inputstr , 1 , 2000 , pFile );
+              fread( inputstr , 1 , 2048 , pFile );
               i = -j;
             }
           }
           else if( strstr(tag , "book_name") )
           {
             j++;
-            if( i+j == 2000 )
+            if( i+j == 2048 )
             {
-              fread( inputstr , 1 , 2000 , pFile );
+              fread( inputstr , 1 , 2048 , pFile );
               i = -j;
             }
             while( inputstr[i+j] != '"' )
             {
               j++;
-              if( i+j == 2000 )
+              if( i+j == 2048 )
               {
-                fread( inputstr , 1 , 2000 , pFile );
+                fread( inputstr , 1 , 2048 , pFile );
                 i = -j;
               }
             }
             int32_t k = 1;
-            if( i+j+k == 2000 )
+            if( i+j+k == 2048 )
             {
-              fread( inputstr , 1 , 2000 , pFile );
+              fread( inputstr , 1 , 2048 , pFile );
               i = -j - k;
             }
             while( inputstr[i+j+k] != '"' )
             {
               tempt -> book_name[k-1] = inputstr[i+j+k];
               k++;
-              if( i+j+k == 2000 )
+              if( i+j+k == 2048 )
               {
-                fread( inputstr , 1 , 2000 , pFile );
+                fread( inputstr , 1 , 2048 , pFile );
                 i = -j - k;
               }
             }
             j += k;
-            if( i+j == 2000 )
+            if( i+j == 2048 )
             {
-              fread( inputstr , 1 , 2000 , pFile );
+              fread( inputstr , 1 , 2048 , pFile );
               i = -j;
             }
           }
           i += j;
         }
         i++;
-        if( i == 2000 )
+        if( i == 2048 )
         {
-          fread( inputstr , 1 , 2000 , pFile );
+          fread( inputstr , 1 , 2048 , pFile );
           i = 0;
         }
       }
@@ -317,7 +317,7 @@ int main()
       {
         pOut = fopen( "output.txt" , "a+" );
         times++;
-	char *num = calloc( 7 , sizeof(char) );
+	      char *num = calloc( 7 , sizeof(char) );
         int32_t Q = 0;
         if( times/10000 != 0 )
         {
@@ -344,7 +344,7 @@ int main()
           num[3] = Q + '0';
           num[4] = '.';
           num[5] = ' ';
-	  num[6] = 0;
+          num[6] = 0;
         }
         else if( times/100 != 0 )
         {
@@ -355,8 +355,8 @@ int main()
           num[2] = Q + '0';
           num[3] = '.';
           num[4] = ' ';
-	  num[5] = 0;
-	  num[6] = 0;
+          num[5] = 0;
+          num[6] = 0;
         }
         else if( times/10 != 0 )
         {
@@ -365,19 +365,19 @@ int main()
           num[1] = Q + '0';
           num[2] = '.';
           num[3] = ' ';
-	  num[4] = 0;
-	  num[5] = 0;
-	  num[6] = 0;
+          num[4] = 0;
+          num[5] = 0;
+          num[6] = 0;
         }
         else
         {
           num[0] = times + '0';
           num[1] = '.';
           num[2] = ' ';
-	  num[3] = 0;
-	  num[4] = 0;
-	  num[5] = 0;
-	  num[6] = 0;
+          num[3] = 0;
+          num[4] = 0;
+          num[5] = 0;
+          num[6] = 0;
         }
         fwrite( num , 1 , strlen(num) , pOut );
         fwrite( &(tempt->book_id[0]) , 1 , strlen(&(tempt->book_id[0])) , pOut );
@@ -391,8 +391,8 @@ int main()
           Q = tempt->chapter % 10;
           num[3] = Q + '0';
           num[4] = ':';
-	  num[5] = 0;
-	  num[6] = 0;
+          num[5] = 0;
+          num[6] = 0;
         }
         else if( tempt->chapter/10 != 0 )
         {
@@ -400,18 +400,18 @@ int main()
           Q = tempt->chapter % 10;
           num[2] = Q + '0';
           num[3] = ':';
-	  num[4] = 0;
-	  num[5] = 0;
-	  num[6] = 0;
+          num[4] = 0;
+          num[5] = 0;
+          num[6] = 0;
         }
         else
         {
           num[1] = tempt->chapter + '0';
           num[2] = ':';
-	  num[3] = 0;
-	  num[4] = 0;
-	  num[5] = 0;
-	  num[6] = 0;
+          num[3] = 0;
+          num[4] = 0;
+          num[5] = 0;
+          num[6] = 0;
         }
         fwrite( num , 1 , strlen(num) , pOut );
         Q = 0;
@@ -423,9 +423,9 @@ int main()
           Q = tempt->verse % 10;
           num[2] = Q + '0';
           num[3] = ' ';
-	  num[4] = 0;
-	  num[5] = 0;
-	  num[6] = 0;
+          num[4] = 0;
+          num[5] = 0;
+          num[6] = 0;
         }
         else if( tempt->verse/10 != 0 )
         {
@@ -433,32 +433,32 @@ int main()
           Q = tempt->verse % 10;
           num[1] = Q + '0';
           num[2] = ' ';
-	  num[3] = 0;
-	  num[4] = 0;
-	  num[5] = 0;
-	  num[6] = 0;
+          num[3] = 0;
+          num[4] = 0;
+          num[5] = 0;
+          num[6] = 0;
         }
         else
         {
           num[0] = tempt->verse + '0';
           num[1] = ' ';
-	  num[2] = 0;
-	  num[3] = 0;
-	  num[4] = 0;
-	  num[5] = 0;
-	  num[6] = 0;
+          num[2] = 0;
+          num[3] = 0;
+          num[4] = 0;
+          num[5] = 0;
+          num[6] = 0;
         }
         fwrite( num , 1 , strlen(num) , pOut );
         fprintf( pOut , "%s\n" , &(tempt -> text[0]) );
         free( num );
-	fclose( pOut );
+	      fclose( pOut );
       }
     }
 
     i++;
-    if( i == 2000 )
+    if( i == 2048 )
     {
-      fread( inputstr , 1 , 2000 , pFile );
+      fread( inputstr , 1 , 2048 , pFile );
       i = 0;
     }
   }
@@ -475,8 +475,8 @@ int main()
   {
     while( !feof(pOut) )
     {
-	    fread( &(inputstr[0]) , 1 , 2000 , pOut );
-	    inputstr[2000] = 0;
+	    fread( &(inputstr[0]) , 1 , 2048 , pOut );
+	    inputstr[2048] = 0;
 	    puts( &(inputstr[0]) );
     }
   }
@@ -506,4 +506,5 @@ void bible_init( bibletext *ret )
   }
   ret -> next = NULL;
 }
+
 
