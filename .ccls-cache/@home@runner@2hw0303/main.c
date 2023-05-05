@@ -258,7 +258,7 @@ int main( int argc , char *argv[] )
 
 		for( size_t k = 0 ; k < n ; k++ )
 		{
-			for( size_t j = 0 ; j < w/n ; j++ )
+			for( size_t j = 0 ; j < w/n-1 ; j++ )
 			{
 				for( size_t q = 0 ; q < n ; q++ )
 				{
@@ -266,11 +266,25 @@ int main( int argc , char *argv[] )
 				}
 			}
 			fseek( pIn , (w/n)*n*3 , SEEK_CUR );
-			if( w % n != 0 )
-			{
-				count = fread( buf , 1 , (w%n)*3 , pIn );
-				fwrite( buf , 1 , count , pOut );
-			}
+      count = fread( buf , 1 , (w%n)*3 , pIn );
+      change[0] = 0;
+      change[1] = 0;
+      change[2] = 0;
+      for( size_t j = 0 ; j < w%n ; j++ )
+      {
+        change[0] += buf[j*3];
+        change[1] += buf[j*3+1];
+        change[2] += buf[j*3+2];
+      }
+      for( size_t j = 0 ; j < 3 ; j++ )
+      {
+        change[j] /= (n*n);
+        save[(w/n-1)*3+j] += (uint8_t)change[j];
+      }
+      for( size_t q = 0 ; q < (n+w%n) ; q++ )
+      {
+  			fwrite( &save[(w/n-1)*3] , 1 , 3 , pOut );
+      }
 			
 			count = fread( buf , 1 , (header.width-y-w)*3+header.width%4 , pIn );
 			fwrite( buf , 1 , count , pOut );
