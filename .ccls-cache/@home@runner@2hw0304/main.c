@@ -412,11 +412,215 @@ int8_t modify( int8_t num )
   		}
     	else if( choice == 19 )
   		{
-  			
+  		    set = 882;
+    			fseek( fp , set , SEEK_SET );
+    			count = fread( &origin[0] , 1 , 2 , fp );
+    			printf( "Weapon Equipment: " );
+    			if( origin[0] == 106 && origin[1] == 0 )
+    			{
+    				  printf( "Xuan Tie Jian\n" );
+    			}
+    			else if( origin[0] == 107 && origin[1] == 0 )
+    			{
+    				  printf( "Jun Zi Jian\n" );
+    			}
+    			else if( origin[0] == 108 && origin[1] == 0 )
+    			{
+    				  printf( "Shu Nu Jian\n" );
+    			}
+    			else if( origin[0] == 109 && origin[1] == 0 )
+    			{
+    				  printf( "Yi Tian Jian\n" );
+    			}
+    			else if( origin[0] == 110 && origin[1] == 0 )
+    			{
+    				  printf( "Jin She Jian\n" );
+    			}
+    			else if( origin[0] == 111 && origin[1] == 0 )
+    			{
+    				  printf( "Ning Bi Jian\n" );
+    			}
+    			else if( origin[0] == 112 && origin[1] == 0 )
+    			{
+    				  printf( "Bai Long Jian\n" );
+    			}
+    			else if( origin[0] == 113 && origin[1] == 0 )
+    			{
+    				  printf( "Bai Hong Jian\n" );
+    			}
+    			else if( origin[0] == 114 && origin[1] == 0 )
+    			{
+    				  printf( "Zhou Gong Jian\n" );
+    			}
+    			else if( origin[0] == 115 && origin[1] == 0 )
+    			{
+    				  printf( "Xie Dao\n" );
+    			}
+    			else if( origin[0] == 116 && origin[1] == 0 )
+    			{
+    				  printf( "Leng Yue Bao Dao\n" );
+    			}
+    			else if( origin[0] == 117 && origin[1] == 0 )
+    			{
+    				  printf( "Tu Long Dao\n" );
+    			}
+    			else if( origin[0] == 118 && origin[1] == 0 )
+    			{
+    				  printf( "Lu Bo Xiang Lu Dao\n" );
+    			}
+    			else if( origin[0] == 119 && origin[1] == 0 )
+    			{
+    				  printf( "Pi Li Kuang Dao\n" );
+    			}
+    			else if( origin[0] == 192 && origin[1] == 0 )
+    			{
+    				  printf( "Zhen Wu Jian\n" );
+    			}
+    			else
+    			{
+    				  printf( "None.\n" );
+    			}
+    
+    			val = (int32_t)getchar();
+    			printf( "What weapon do to want to modify to? Please type it in with Pin Yin. " );
+    			char buf[30] = {0};
+    			fgets( &buf[0] , 30 , stdin );
+    			if( strstr( &buf[0] , "Xuan Tie Jian" ) )
+    			{
+    				  val = 106;
+    			}
+    			else if( strstr( &buf[0] , "Jun Zi Jian" ) )
+    			{
+    				  val = 107;
+    			}
+    			else if( strstr( &buf[0] , "Shu Nu Jian" ) )
+    			{
+    				  val = 108;
+    			}
+    			else if( strstr( &buf[0] , "Yi Tian Jian" ) )
+    			{
+    				  val = 109;
+    			}
+    			else if( strstr( &buf[0] , "Jin She Jian" ) )
+    			{
+    				  val = 110;
+    			}
+    			else if( strstr( &buf[0] , "Ning Bi Jian" ) )
+    			{
+    				  val = 111;
+    			}
+    			else if( strstr( &buf[0] , "Bai Long Jian" ) )
+    			{
+    				  val = 112;
+    			}
+    			else if( strstr( &buf[0] , "Bai Hong Jian" ) )
+    			{
+    				  val = 113;
+    			}
+    			else if( strstr( &buf[0] , "Zhou Gong Jian" ) )
+    			{
+    				  val = 114;
+    			}
+    			else if( strstr( &buf[0] , "Xie Dao" ) )
+    			{
+    				  val = 115;
+    			}
+    			else if( strstr( &buf[0] , "Leng Yue Bao Dao" ) )
+    			{
+    				  val = 116;
+    			}
+    			else if( strstr( &buf[0] , "Tu Long Dao" ) )
+    			{
+    				  val = 117;
+    			}
+    			else if( strstr( &buf[0] , "Lu Bo Xiang Lu Dao" ) )
+    			{
+    				  val = 118;
+    			}
+    			else if( strstr( &buf[0] , "Pi Li Kuang Dao" ) )
+    			{
+    				  val = 119;
+    			}
+    			else if( strstr( &buf[0] , "Zhen Wu Jian" ) )
+    			{
+    				  val = 192;
+    			}
+    			else
+    			{
+    				  printf( "Not a available weapon.\n\n" );
+    				  continue;
+    			}
+    			
+    			changed[0] = (uint8_t)val;
+    			changed[1] = 0;
+    			fseek( fp , -2 , SEEK_CUR );
+    			fwrite( &changed[0] , 1 , 2 , fp );
   		}
     	else if( choice == 20 )
   		{
-  			
+  		    set = 884;
+    			fseek( fp , set , SEEK_SET );
+    			count = fread( &origin[0] , 1 , 2 , fp );
+    			printf( "Defending Equipment: " );
+    			if( origin[0] == 120 && origin[1] == 0 )
+    			{
+    				  printf( "Ruan Wei Jia\n" );
+    			}
+    			else if( origin[0] == 121 && origin[1] == 0 )
+    			{
+    				  printf( "Jin Si Bei Xin\n" );
+    			}
+    			else if( origin[0] == 122 && origin[1] == 0 )
+    			{
+    				  printf( "Wu Can Yi\n" );
+    			}
+    			else if( origin[0] == 123 && origin[1] == 0 )
+    			{
+    				  printf( "E Yu Pi Jia\n" );
+    			}
+    			else if( origin[0] == 197 && origin[1] == 0 )
+    			{
+    				  printf( "Pi Yi\n" );
+    			}
+    			else
+    			{
+    				  printf( "None.\n" );
+    			}
+    
+    			val = (int32_t)getchar();
+    			printf( "What defending equipment do to want to modify to? Please type it in with Pin Yin. " );
+    			char buf[30] = {0};
+    			fgets( &buf[0] , 30 , stdin );
+    			if( strstr( &buf[0] , "Ruan Wei Jia" ) )
+    			{
+    				  val = 120;
+    			}
+    			else if( strstr( &buf[0] , "Jin Si Bei Xin" ) )
+    			{
+    				  val = 121;
+    			}
+    			else if( strstr( &buf[0] , "Wu Can Yi" ) )
+    			{
+    				  val = 122;
+    			}
+    			else if( strstr( &buf[0] , "E Yu Pi Jia" ) )
+    			{
+    				  val = 123;
+    			}
+    			else if( strstr( &buf[0] , "Pi Yi" ) )
+    			{
+    				  val = 197;
+    			}
+    			else
+    			{
+      				printf( "Not a available depending equipment.\n\n" );
+      				continue;
+    			}
+    			
+    			changed[0] = (uint8_t)val;
+    			changed[1] = 0;
+    			fseek( fp , -2 , SEEK_CUR );
+    			fwrite( &changed[0] , 1 , 2 , fp );
   		}
     	else if( choice == 21 )///////////////////////////////////////////////////
       {
