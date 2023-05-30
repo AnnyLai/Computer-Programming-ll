@@ -17,5 +17,5 @@
 #define FOREACH(i,A) for( size_t ct = 0 ; ct < sizeof(A)/sizeof(A[0]) ; ct++ )\
 {\
   A[ct] = i;\
-}\
+}
 
