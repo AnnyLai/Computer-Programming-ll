@@ -161,34 +161,63 @@ int main( int argc, char *argv[] )
 	{
 		fseek( pB , header.size+1 , SEEK_SET );
 		//printf( "bmpsize = %d\n" , header.size );
+    char *outname = NULL;
+    FILE *out = NULL;
 		while( !feof(pB) )
 		{
 			//printf( "b\n" );
 			fseek( pB , -1 , SEEK_CUR );
 			//printf( "start file header = %ld\n" , ftell( pB ) );
 			count = fread( &size , 4 , 1 , pB );
+      if( size > 0 )
+      {
+        outname = (char *)calloc( size+1 , sizeof(char) );
+      }
 			//printf( "%d\n" , size );
 			int32_t fsize = 0;
 			count = fread( &fsize , 4 , 1 , pB );
-			//printf( "filesize = %d\n" , fsize );
+			printf( "filesize = %d\n" , fsize );
+      j = 0;
 			while( size > 0 )
 			{
 				count = fread( &buf[0] , 1 , 1024 , pB );
 				size -= count;
 				if( size < 0 )
 				{
+          for( i = 0 ; i < size+count ; i++ )
+          {
+            outname[j] = buf[i];
+            j++;
+          }
 					fseek( pB , size , SEEK_CUR );
 				}
-				buf[count] = 0;
+        else
+        {
+          for( i = 0 ; i < count ; i++ )
+          {
+            outname[j] = buf[i];
+            j++;
+          }
+        }
 			}
-			//puts( &buf[0] );
+      if( outname == NULL || fsize == 0 || strlen(outname) == 0 )
+      {
+        break;
+      }
+      out = fopen( outname , "w" );
+      if( out != NULL )
+      {
+        puts( outname );
+        printf( "File opened.\n" );
+      }/**/
 			//printf( "start file content = %ld\n" , ftell( pB ) );
 			while( fsize > 0 )
 			{
 				count = fread( &buf[0] , 1 , 1024 , pB );
 				for( i = 0 ; i < count ; i++ )
 				{
-					printf( "%c" , buf[i] );
+					//printf( "%c" , buf[i] );
+          fwrite( &buf[i] , 1 , 1 , out );
 					fsize--;
 					if( fsize == 0 )
 					{
@@ -199,6 +228,15 @@ int main( int argc, char *argv[] )
 				}
 				//printf( "c\n" );
 			}
+
+      if( out != NULL )
+      {
+        fclose( out );
+      }
+      if( outname != NULL )
+      {
+        free( outname );
+      }
 		}
 	}
 
